@@ -1,0 +1,9 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_it_asset_request_user,it.asset.request user,model_it_asset_request,group_it_asset_user,1,1,1,0
+access_it_asset_request_manager,it.asset.request manager,model_it_asset_request,group_it_asset_manager,1,1,1,1
+access_it_asset_equipment_manager,it.asset.equipment manager,model_it_asset_equipment,group_it_asset_manager,1,1,1,1
+access_it_asset_request_line_user,it.asset.request.line user,model_it_asset_request_line,group_it_asset_user,1,1,1,0
+access_it_asset_request_line_manager,it.asset.request.line manager,model_it_asset_request_line,group_it_asset_manager,1,1,1,1
+access_it_asset_equipment_manager,it.asset.equipment manager,model_it_asset_equipment,group_it_asset_manager,1,1,1,1
+access_it_asset_equipment_user,it.asset.equipment user,model_it_asset_equipment,group_it_asset_user,1,0,0,0
+access_asset_rejection_wizard,asset.rejection.wizard,model_it_asset_rejection_wizard,group_it_asset_manager,1,1,1,1

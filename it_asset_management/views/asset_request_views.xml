@@ -1,0 +1,191 @@
+<odoo>
+    <record id="view_it_asset_request_list" model="ir.ui.view">
+        <field name="name">it.asset.request.list</field>
+        <field name="model">it.asset.request</field>
+        <field name="arch" type="xml">
+            <list string="Equipment Requests">
+                <field name="request_number"/>
+                <field name="name"/>
+                <field name="phone"/>
+                <field name="requested_by"/>
+                <!--                <field name="equipment_type"/>-->
+                <!--                <field name="quantity"/>-->
+                <!--                <field name="unit_price"/>-->
+                <field name="total_price"/>
+                <field name="submission_datetime" optional="hide" options="{'condensed': False, 'numeric': True}"/>
+                <field name="approve_reject_datetime" optional="hide"/>
+                <field name="expected_date" optional="hide"/>
+                <field name="status"
+                       widget="badge"
+                       decoration-success="status == 'approved'"
+                       decoration-danger="status == 'rejected'"
+                       decoration-info="status == 'submitted'"
+                       decoration-muted="status == 'draft'"
+                />
+            </list>
+        </field>
+    </record>
+
+    <record id="view_it_asset_request_form" model="ir.ui.view">
+        <field name="name">it.asset.request.form</field>
+        <field name="model">it.asset.request</field>
+        <field name="arch" type="xml">
+
+            <form string="IT Equipment Request">
+                <header>
+                    <button name="action_submit"
+                            string="Submit"
+                            type="object"
+                            class="btn-primary"
+                            invisible="status != 'draft'"/>
+
+                    <button name="action_approve"
+                            string="Approve"
+                            type="object"
+                            class="btn-success"
+                            invisible="status != 'submitted'"
+                            groups="it_asset_management.group_it_asset_manager"/>
+
+                    <button name="action_open_rejection_wizard"
+                            string="Reject"
+                            type="object"
+                            class="btn-danger"
+                            invisible="status != 'submitted'"
+                            groups="it_asset_management.group_it_asset_manager"/>
+
+                    <button name="action_return_to_draft"
+                            string="Return to Draft"
+                            type="object"
+                            invisible="status not in ['approved', 'rejected']"
+                            groups="it_asset_management.group_it_asset_manager"/>
+
+                    <field name="status"
+                           widget="statusbar"
+                           statusbar_visible="draft,submitted,approved,rejected"/>
+                </header>
+
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="request_number" readonly="True"/>
+                            <field name="name" readonly="status != 'draft'"/>
+                            <field name="requested_by" readonly="status != 'draft'"/>
+                            <field name="phone" readonly="status != 'draft'"/>
+                            <!--                            <field name="status" readonly="True"/>-->
+                        </group>
+                        <group>
+                            <field name="submission_datetime" readonly="True"/>
+                            <field name="approve_reject_datetime" readonly="True"/>
+                            <field name="expected_date" readonly="True"/>
+                        </group>
+                    </group>
+
+                    <group>
+                        <group>
+                            <!--                            <field name="equipment_type" readonly="status != 'draft'"/>-->
+                            <!--                            <field name="quantity" readonly="status != 'draft'"/>-->
+                            <field name="reason" readonly="status != 'draft'"/>
+                        </group>
+                        <group>
+                            <!--                            <field name="unit_price" readonly="True"/>-->
+                            <field name="total_price" readonly="True"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Requested Equipment">
+                            <field name="line_ids">
+                                <list editable="bottom">
+                                    <field name="equipment_id"/>
+                                    <field name="quantity"/>
+                                    <field name="unit_price" readonly="1"/>
+                                    <field name="subtotal" readonly="1"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Approval Details">
+                            <group>
+                                <group>
+                                    <field name="requested_by" readonly="True"/>
+                                    <field name="approved_by" readonly="True"/>
+                                </group>
+                                <group>
+                                    <field name="submission_datetime" readonly="True"/>
+                                    <field name="approve_reject_datetime" readonly="True"/>
+                                </group>
+                            </group>
+                        </page>
+                    </notebook>
+                </sheet>
+
+                <chatter/>
+            </form>
+
+        </field>
+    </record>
+
+    <!--THE NEW FORM AND VIEW FOR THE EQUIPMENT CATALOGUE-->
+
+    <!--    <record id="view_it_asset_equipment_list" model="ir.ui.view">-->
+    <!--        <field name="name">it.asset.equipment.list</field>-->
+    <!--        <field name="model">it.asset.equipment</field>-->
+    <!--        <field name="arch" type="xml">-->
+    <!--            <list string="Equipment Catalogue">-->
+    <!--                <field name="name"/>-->
+    <!--                <field name="equipment_type"/>-->
+    <!--                <field name="specifications"/>-->
+    <!--                <field name="unit_price"/>-->
+    <!--            </list>-->
+    <!--        </field>-->
+    <!--    </record>-->
+    <!--    <record id="view_it_asset_equipment_form" model="ir.ui.view">-->
+    <!--        <field name="name">it.asset.equipment.form</field>-->
+    <!--        <field name="model">it.asset.equipment</field>-->
+    <!--        <field name="arch" type="xml">-->
+    <!--            <form string="Equipment">-->
+    <!--                <sheet>-->
+    <!--                    <group>-->
+    <!--                        <field name="name"/>-->
+    <!--                        <field name="equipment_type"/>-->
+    <!--                        <field name="unit_price"/>-->
+    <!--                    </group>-->
+    <!--                    <group>-->
+    <!--                        <field name="specifications"/>-->
+    <!--                    </group>-->
+    <!--                </sheet>-->
+    <!--            </form>-->
+    <!--        </field>-->
+    <!--    </record>-->
+
+    <!--    <record id="action_it_asset_equipment" model="ir.actions.act_window">-->
+    <!--        <field name="name">Equipment Catalogue</field>-->
+    <!--        <field name="res_model">it.asset.equipment</field>-->
+    <!--        <field name="view_mode">list,form</field>-->
+    <!--    </record>-->
+
+    <record id="action_it_asset_request" model="ir.actions.act_window">
+        <field name="name">Equipment Requests</field>
+        <field name="res_model">it.asset.request</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <menuitem
+            id="menu_it_asset_management_root"
+            name="IT Asset Management"
+            sequence="10"
+    />
+
+    <!--    <menuitem-->
+    <!--            id="menu_it_asset_equipment"-->
+    <!--            name="Equipment Catalogue"-->
+    <!--            parent="menu_it_asset_management_root"-->
+    <!--            action="action_it_asset_equipment"-->
+    <!--            sequence="20"-->
+    <!--    />-->
+    <menuitem
+            id="menu_it_asset_requests"
+            name="Equipment Requests"
+            parent="menu_it_asset_management_root"
+            action="action_it_asset_request"
+            sequence="10"
+    />
+</odoo>

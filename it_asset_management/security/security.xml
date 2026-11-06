@@ -1,0 +1,12 @@
+<odoo>
+    <record id="group_it_asset_user" model="res.groups">
+        <field name="name">IT Asset User</field>
+        <field name="comment">Can submit and view their own equipment requests.</field>
+    </record>
+
+    <record id="group_it_asset_manager" model="res.groups">
+        <field name="name">IT Asset Manager</field>
+        <field name="comment">Can manage all equipment requests and the equipment catalogue.</field>
+        <field name="implied_ids" eval="[(4, ref('group_it_asset_user'))]"/>
+    </record>
+</odoo>

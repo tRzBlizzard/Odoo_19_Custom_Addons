@@ -1,0 +1,126 @@
+<odoo>
+    <record id="report_myownasset_request" model="ir.actions.report">
+
+        <field name="name">My Report Format</field>
+
+        <field name="model">it.asset.request</field>
+
+        <field name="report_type">qweb-pdf</field>
+
+        <field name="report_name">it_asset_management.myownasset_report</field>
+
+        <field name="report_file">it_asset_management.myownasset_report</field>
+
+        <field name="binding_model_id" ref="model_it_asset_request"/>
+
+        <field name="binding_type">report</field>
+
+    </record>
+
+    <template id="myownasset_report">
+
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="obj">
+                <t t-call="web.external_layout">
+                    <div class="page">
+                        <h2 class="text-center">IT Asset Request</h2>
+                        <p>
+                            <strong>Request Number:</strong>
+                            <span t-field="obj.request_number"/>
+                        </p>
+
+                        <br/>
+
+                        <h4>Equipment Request Info</h4>
+
+                        <table class="table table-sm table-bordered mt-4">
+                            <thead>
+                                <tr>
+                                    <th>Request Title</th>
+                                    <th>Status</th>
+                                    <th>Requested By</th>
+                                    <th>Phone</th>
+                                    <th>Submission Date</th>
+                                    <th>Approved By</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        <span t-field="obj.name"/>
+                                    </td>
+                                    <td>
+                                        <span t-field="obj.status"/>
+                                    </td>
+                                    <td>
+                                        <span t-field="obj.requested_by"/>
+                                    </td>
+                                    <td>
+                                        <span t-field="obj.phone"/>
+                                    </td>
+                                    <td>
+                                        <span t-field="obj.submission_datetime"/>
+                                    </td>
+                                    <td>
+                                        <span t-field="obj.approved_by"/>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <h4 class="mt-2">Requested Equipment and its Specifications</h4>
+
+                        <!--                        temp variable for subtotal grand sum-->
+                        <t t-set="GrandTotal" t-value="0.0"/>
+
+                        <table class="table table-sm table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>Equipment Name</th>
+                                    <th>Equipment Specs</th>
+                                    <th>Equipment Quantity</th>
+                                    <th>Equipment Unit Price</th>
+                                    <th>Total Price</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <t t-foreach="obj.line_ids" t-as="l">
+                                    <tr>
+                                        <td>
+                                            <span t-field="l.equipment_id"/>
+                                        </td>
+                                        <td>
+                                            <span t-field="l.equipment_id.specifications"/>
+                                        </td>
+                                        <td>
+                                            <span t-field="l.quantity"/>
+                                        </td>
+                                        <td>
+                                            <span t-field="l.unit_price"/>
+                                        </td>
+                                        <td>
+                                            <span t-field="l.subtotal"/>
+                                        </td>
+                                        <t t-set="GrandTotal" t-value="GrandTotal + l.subtotal"/>
+
+                                    </tr>
+                                </t>
+                            </tbody>
+                        </table>
+
+                        <br/>
+
+                        <h4>Grand Total:</h4>
+                        <span t-out="GrandTotal"/>
+                        <t t-out="sum(l.subtotal for l in obj.line_ids)"/>
+                        <span t-field="obj.total_price"/>
+
+                    </div>
+                </t>
+            </t>
+        </t>
+
+
+    </template>
+
+</odoo>

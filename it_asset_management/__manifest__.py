@@ -1,0 +1,22 @@
+{
+    "name": "IT Asset Management",
+    "version": "19.0.1.0.0",
+    "author": "AESL",
+    "summary": "Basic IT equipment requests",
+    "category": "Operations",
+    "depends": ["base", "mail", "sales_team"],
+    "data": [
+        "security/security.xml",
+        "security/record_rules.xml",
+        "security/ir.model.access.csv",
+        "data/sequence.xml",
+        "data/mail_template.xml",
+        "report/asset_request_report.xml",
+        "report/myownasset_report.xml",
+        "views/asset_rejection_wizard_views.xml",
+        "views/asset_request_views.xml",
+        "views/equipment_views.xml",
+    ],
+    "installable": True,
+    "application": True,
+}

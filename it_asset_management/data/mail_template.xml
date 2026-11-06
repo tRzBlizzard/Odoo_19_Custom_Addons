@@ -1,0 +1,111 @@
+<odoo>
+    <record id="mail_template_it_asset_request_submitted" model="mail.template">
+
+        <field name="name">IT Asset Request - Submitted</field>
+
+        <field name="model_id" ref="model_it_asset_request"/>
+
+        <field name="subject">IT Request Submitted: {{ object.request_number }}</field>
+
+        <field name="email_to">{{ object._get_it_asset_manager().email }}</field>
+
+        <field name="auto_delete" eval="False"/>
+
+
+        <field name="body_html" type="html">
+            <div>
+                <p>Hello,</p>
+
+                <p>
+                    A new IT equipment request has been submitted
+                    and requires your review.
+                </p>
+
+                <ul>
+                    <li>
+                        <strong>Request Number:</strong>
+                        <t t-out="object.request_number"/>
+                    </li>
+                    <li>
+                        <strong>Request Title:</strong>
+                        <t t-out="object.name"/>
+                    </li>
+                    <li>
+                        <strong>Requested By:</strong>
+                        <t t-out="object.requested_by.name"/>
+                    </li>
+                </ul>
+
+                <p>
+                    Please review this request:
+                    <a t-att-href="'%s/web#id=%s&amp;model=it.asset.request&amp;view_type=form' % (object.get_base_url(), object.id)">
+                        Open Request
+                    </a>
+                </p>
+
+                <p>Thank you.</p>
+            </div>
+        </field>
+
+    </record>
+    <record id="mail_template_it_asset_request_decision" model="mail.template">
+
+        <field name="name">IT Asset Request - Decision</field>
+
+        <field name="model_id" ref="model_it_asset_request"/>
+
+        <field name="subject">IT Request {{ object.status.title() }}: {{ object.request_number }}</field>
+
+        <field name="email_to">{{ object.requested_by.email }}</field>
+
+        <field name="auto_delete" eval="False"/>
+
+        <field name="body_html" type="html">
+            <div>
+                <p>Hello<t t-out="object.requested_by.name"/>,
+                </p>
+
+                <p>
+                    Your IT equipment request has been
+                    <strong>
+                        <t t-out="object.status.title()"/>
+                    </strong>
+                    .
+                </p>
+
+                <ul>
+                    <li>
+                        <strong>Request Number:</strong>
+                        <t t-out="object.request_number"/>
+                    </li>
+                    <li>
+                        <strong>Request Title:</strong>
+                        <t t-out="object.name"/>
+                    </li>
+                    <li>
+                        <strong>Decision By:</strong>
+                        <t t-out="object.approved_by.name"/>
+                    </li>
+                    <li>
+                        <strong>Decision Date:</strong>
+                        <t t-out="object.approve_reject_datetime"/>
+                    </li>
+                    <li t-if="object.status == 'rejected'">
+                        <strong>Rejection Reason:</strong>
+                        <t t-out="object.rejection_reason"/>
+                    </li>
+                </ul>
+
+                <p>
+                    You can view your request here:
+                    <a t-att-href="'%s/web#id=%s&amp;model=it.asset.request&amp;view_type=form' % (object.get_base_url(), object.id)">
+                        View Request
+                    </a>
+                </p>
+
+                <p>Thank you.</p>
+            </div>
+        </field>
+
+    </record>
+</odoo>

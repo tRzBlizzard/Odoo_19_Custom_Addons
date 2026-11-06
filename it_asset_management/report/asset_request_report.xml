@@ -1,0 +1,160 @@
+<odoo>
+
+    <record id="action_report_it_asset_request" model="ir.actions.report">
+
+        <field name="name">PDF Report</field>
+
+        <field name="model">it.asset.request</field>
+
+        <field name="report_type">qweb-pdf</field>
+
+        <field name="report_name">it_asset_management.report_it_asset_request_document</field>
+
+        <field name="binding_model_id" ref="model_it_asset_request"/>
+
+        <field name="binding_type">report</field>
+
+    </record>
+
+    <template id="report_it_asset_request_document">
+        <t t-call="web.html_container">
+
+            <t t-foreach="docs" t-as="o">
+                <t t-call="web.external_layout">
+
+                    <div class="page">
+
+                        <h2 class="text-center">
+                            IT Equipment Request
+                        </h2>
+
+                        <br/>
+
+                        <!-- Request Information -->
+                        <h4>Request Information</h4>
+
+                        <table class="table table-sm table-bordered">
+                            <tr>
+                                <th>Request Number</th>
+                                <td>
+                                    <span t-field="o.request_number"/>
+                                </td>
+                                <th>Status</th>
+                                <td>
+                                    <span t-field="o.status"/>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <th>Request Title</th>
+                                <td>
+                                    <span t-field="o.name"/>
+                                </td>
+                                <th>Requested By</th>
+                                <td>
+                                    <span t-field="o.requested_by"/>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <th>Phone</th>
+                                <td>
+                                    <span t-field="o.phone"/>
+                                </td>
+                                <th>Submission Date</th>
+                                <td>
+                                    <span t-field="o.submission_datetime"/>
+                                </td>
+                            </tr>
+                        </table>
+
+                        <!-- Equipment Details -->
+                        <h4 class="mt-4">Requested Equipment</h4>
+
+                        <table class="table table-sm table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>Equipment</th>
+                                    <th>Specifications</th>
+                                    <th>Quantity</th>
+                                    <th>Unit Price</th>
+                                    <th>Subtotal</th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+                                <tr t-foreach="o.line_ids" t-as="line">
+                                    <td>
+                                        <span t-field="line.equipment_id"/>
+                                    </td>
+                                    <td>
+                                        <span t-field="line.equipment_id.specifications"/>
+                                    </td>
+                                    <td>
+                                        <span t-field="line.quantity"/>
+                                    </td>
+                                    <td>
+                                        <span t-field="line.unit_price"/>
+                                    </td>
+                                    <td>
+                                        <span t-field="line.subtotal"/>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <div class="text-end mt-3">
+                            <h4>
+                                Total:
+                                <span t-field="o.total_price"/>
+                            </h4>
+                        </div>
+
+                        <!-- Reason -->
+                        <h4 class="mt-4">Request Reason</h4>
+                        <p>
+                            <span t-field="o.reason"/>
+                        </p>
+
+                        <!-- Approval Information -->
+                        <t t-if="o.approved_by">
+                            <h4 class="mt-4">Approval Information</h4>
+
+                            <table class="table table-sm table-bordered">
+                                <tr>
+                                    <th>Decision By</th>
+                                    <td>
+                                        <span t-field="o.approved_by"/>
+                                    </td>
+                                    <th>Decision Date</th>
+                                    <td>
+                                        <span t-field="o.approve_reject_datetime"/>
+                                    </td>
+                                </tr>
+
+                                <tr t-if="o.expected_date">
+                                    <th>Expected Date</th>
+                                    <td colspan="3">
+                                        <span t-field="o.expected_date"/>
+                                    </td>
+                                </tr>
+                            </table>
+                        </t>
+
+                        <!-- Rejection Reason -->
+                        <t t-if="o.status == 'rejected'">
+                            <h4 class="mt-4">Rejection Reason</h4>
+                            <p>
+                                <span t-field="o.rejection_reason"/>
+                            </p>
+                        </t>
+
+                    </div>
+
+                </t>
+            </t>
+
+        </t>
+    </template>
+
+</odoo>
