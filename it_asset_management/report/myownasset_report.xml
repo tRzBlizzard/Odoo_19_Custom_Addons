@@ -11,6 +11,9 @@
 
         <field name="report_file">it_asset_management.myownasset_report</field>
 
+        <field name="print_report_name">'%s' % (object.request_number)</field>
+
+
         <field name="binding_model_id" ref="model_it_asset_request"/>
 
         <field name="binding_type">report</field>
@@ -22,7 +25,26 @@
         <t t-call="web.html_container">
             <t t-foreach="docs" t-as="obj">
                 <t t-call="web.external_layout">
-                    <div class="page">
+                    <div>
+
+
+                        <div style="position: absolute; top: 20px; right: 20px; z-index: 9999;">
+                            <!-- Approved Status (Green) -->
+                            <t t-if="obj.status == 'approved'">
+                                <div style="border: 4px solid #198754; color: #198754; font-size: 24px; font-weight: bold; text-transform: uppercase; padding: 10px 20px; border-radius: 5px; transform: rotate(15deg); opacity: 0.85; font-family: sans-serif;">
+                                    APPROVED
+                                </div>
+                            </t>
+
+                            <!-- Failed/Rejected Status (Red) -->
+                            <t t-if="obj.status == 'rejected'">
+                                <div style="border: 4px solid #dc3545; color: #dc3545; font-size: 24px; font-weight: bold; text-transform: uppercase; padding: 10px 20px; border-radius: 5px; transform: rotate(15deg); opacity: 0.85; font-family: sans-serif;">
+                                    Rejected
+                                </div>
+                            </t>
+                        </div>
+
+
                         <h2 class="text-center">IT Asset Request</h2>
                         <p>
                             <strong>Request Number:</strong>
@@ -36,12 +58,20 @@
                         <table class="table table-sm table-bordered mt-4">
                             <thead>
                                 <tr>
-                                    <th>Request Title</th>
-                                    <th>Status</th>
-                                    <th>Requested By</th>
-                                    <th>Phone</th>
-                                    <th>Submission Date</th>
-                                    <th>Approved By</th>
+                                    <th style="background-color: #263238 !important; color: white !important;">Request
+                                        Title
+                                    </th>
+                                    <th style="background-color: #263238 !important; color: white !important;">Status
+                                    </th>
+                                    <th style="background-color: #263238 !important; color: white !important;">Requested
+                                        By
+                                    </th>
+                                    <th style="background-color: #263238 !important; color: white !important;">Phone
+                                    </th>
+                                    <th style="background-color: #263238 !important; color: white !important;">
+                                        Submission Date
+                                    </th>
+                                    <!--                                    <th>Approved By</th>-->
                                 </tr>
                             </thead>
                             <tbody>
@@ -61,9 +91,9 @@
                                     <td>
                                         <span t-field="obj.submission_datetime"/>
                                     </td>
-                                    <td>
-                                        <span t-field="obj.approved_by"/>
-                                    </td>
+                                    <!--                                    <td>-->
+                                    <!--                                        <span t-field="obj.approved_by"/>-->
+                                    <!--                                    </td>-->
                                 </tr>
                             </tbody>
                         </table>
@@ -76,11 +106,21 @@
                         <table class="table table-sm table-bordered">
                             <thead>
                                 <tr>
-                                    <th>Equipment Name</th>
-                                    <th>Equipment Specs</th>
-                                    <th>Equipment Quantity</th>
-                                    <th>Equipment Unit Price</th>
-                                    <th>Total Price</th>
+                                    <th style="background-color: #263238 !important; color: white !important;">Equipment
+                                        Name
+                                    </th>
+                                    <th style="background-color: #263238 !important; color: white !important;">Equipment
+                                        Specs
+                                    </th>
+                                    <th style="background-color: #263238 !important; color: white !important;">Equipment
+                                        Quantity
+                                    </th>
+                                    <th style="background-color: #263238 !important; color: white !important;">Equipment
+                                        Unit Price
+                                    </th>
+                                    <th style="background-color: #263238 !important; color: white !important;">Total
+                                        Price
+                                    </th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -108,12 +148,69 @@
                             </tbody>
                         </table>
 
+                        <table class="table table-sm borderless" style="width: 100%;">
+                            <tr>
+                                <td class="text-start">
+                                    <strong>Grand total</strong>
+                                </td>
+                                <td class="text-end">
+                                    <span t-out="GrandTotal"/>
+                                </td>
+                            </tr>
+                        </table>
                         <br/>
 
-                        <h4>Grand Total:</h4>
-                        <span t-out="GrandTotal"/>
-                        <t t-out="sum(l.subtotal for l in obj.line_ids)"/>
-                        <span t-field="obj.total_price"/>
+                        <h4 class="mt-2">Approval Details</h4>
+
+                        <table class="table table-sm table-bordered">
+                            <thead>
+                                <tr>
+                                    <th style="background-color: #263238 !important; color: white !important;">Approver
+                                        Name
+                                    </th>
+                                    <th style="background-color: #263238 !important; color: white !important;">Decision
+                                        Date
+                                    </th>
+                                    <th style="background-color: #263238 !important; color: white !important;">Expected
+                                        Date of Allocation
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        <span t-field="obj.approved_by"/>
+                                    </td>
+                                    <td>
+                                        <span t-field="obj.approve_reject_datetime"/>
+                                    </td>
+                                    <td>
+                                        <span t-field="obj.expected_date"/>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+
+                        <t t-if="obj.status == 'rejected'">
+                            <br/>
+                            <table class="table table-sm borderless" style="width: 100%;">
+                                <tr>
+                                    <td class="text-start">
+                                        <strong>Rejection Reason</strong>
+                                    </td>
+                                    <td class="text-end">
+                                        <span t-field="obj.rejection_reason"/>
+                                    </td>
+                                </tr>
+                            </table>
+                            <!--                            <h4 class="mt-4">Rejection Reason</h4>-->
+
+                            <!--                            <p>-->
+                            <!--                                <span t-field="obj.rejection_reason"/>-->
+                            <!--                            </p>-->
+
+                        </t>
 
                     </div>
                 </t>
