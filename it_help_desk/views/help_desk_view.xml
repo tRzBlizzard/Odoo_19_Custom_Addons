@@ -1,0 +1,33 @@
+<odoo>
+    <record id="view_it_help_desk_list" model="ir.ui.view">
+        <field name="name">it.help.desk.list</field>
+        <field name="model">it.help.desk</field>
+        <field name="arch" type="xml">
+            <list string="IT Help Desk">
+                <field name="ticket_number"/>
+                <field name="request_number"/>
+                <field name="requester_id"/>
+                <field name="priority"/>
+                <field name="assigned_technician"/>
+
+            </list>
+        </field>
+    </record>
+
+
+    <record id="view_it_help_desk_form" model="ir.ui.view">
+        <field name="name">it.help.desk.form</field>
+        <field name="model">it.help.desk</field>
+        <field name="arch" type="xml">
+            <form string="Helpdesk Ticket">
+                <header>
+                    <field name="status" widget="statusbar" statusbar_visible="draft,raised,in_progress,resolved,closed"
+                </header>
+
+
+            </form>
+        </field>
+    </record>
+
+
+</odoo>
