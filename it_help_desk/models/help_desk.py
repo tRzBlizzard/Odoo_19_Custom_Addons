@@ -30,7 +30,7 @@ class ItHelpDesk(models.Model):
         string='Ticket Generated On',
         required=True,
         readonly=True,
-        default=fields.Datetime.now,
+        # default=fields,
     )
 
     ticket_raised_date = fields.Datetime(
