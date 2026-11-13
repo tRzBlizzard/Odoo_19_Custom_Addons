@@ -30,7 +30,7 @@ class ItHelpDesk(models.Model):
         string='Ticket Generated On',
         required=True,
         readonly=True,
-        # default=fields,
+        default=fields.Datetime.now,
     )
 
     ticket_raised_date = fields.Datetime(
@@ -116,3 +116,27 @@ class ItHelpDesk(models.Model):
         string='Approver',
         store=True
     )
+
+    @api.model_create_multi
+    def create(self, vals_list):
+        for vals in vals_list:
+            if vals.get("ticket_number", "New") == "New":
+                vals["ticket_number"] = (
+                        self.env["ir.sequence"].next_by_code("it.help.desk")
+                        or "New"
+                )
+
+        return super().create(vals_list)
+
+
+    def action_raise_ticket(self):
+        for ticket in self:
+            if ticket.status == "draft":
+                # manager = request._get_it_asset_manager()
+                ticket.ticket_raised_date = fields.Datetime.now()
+                ticket.status = "raised"
+                # template = self.env.ref(
+                #     "it_asset_management.mail_template_it_asset_request_submitted"
+                # )
+
+                # template.send_mail(request.id, force_send=True)

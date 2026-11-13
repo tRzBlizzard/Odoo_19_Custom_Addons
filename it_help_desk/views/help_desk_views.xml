@@ -27,6 +27,12 @@
         <field name="arch" type="xml">
             <form string="Helpdesk Ticket">
                 <header>
+                    <button name="action_raise_ticket"
+                            string="Raise Ticket"
+                            type="object"
+                            class="btn-primary"
+                            invisible="status != 'draft'"/>
+
                     <field name="status" widget="statusbar"
                            statusbar_visible="draft,raised,in_progress,resolved,closed"/>
                 </header>

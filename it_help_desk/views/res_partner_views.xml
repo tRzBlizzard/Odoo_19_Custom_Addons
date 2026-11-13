@@ -1,0 +1,15 @@
+<odoo>
+    <record id="view_res_partner_form_technicians" model="ir.ui.view">
+        <field name="name">res.partner.form.technicians</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='company_type']" position="after">
+                <div class="o_row">
+                    <field name="is_technicians"/>
+                    <label for="is_technicians" string="Technician"/>
+                </div>
+            </xpath>
+        </field>
+    </record>
+</odoo>
