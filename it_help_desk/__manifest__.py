@@ -6,6 +6,8 @@
     "category": "Operations",
     "depends": ["base", "mail", "it_asset_management"],
     "data": [
+        "security/security.xml",
+        "security/ir.model.access.csv",
         "security/ir.model.access.csv",
         "data/sequence.xml",
         'views/res_partner_views.xml',

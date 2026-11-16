@@ -1,2 +1,4 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
-access_it_help_desk_user,it.help.desk user,model_it_help_desk,base.group_user,1,1,1,1
+access_it_help_desk_asset_user,IT Asset User,model_it_help_desk,it_asset_management.group_it_asset_user,1,1,0,0
+access_it_help_desk_asset_manager,IT Asset Manager,model_it_help_desk,it_asset_management.group_it_asset_manager,1,1,1,1
+access_it_help_desk_technician,IT Technician,model_it_help_desk,it_help_desk.group_it_technician,1,1,0,0

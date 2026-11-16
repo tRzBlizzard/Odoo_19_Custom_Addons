@@ -8,13 +8,13 @@
                 <field name="request_number"/>
                 <field name="requester_id"/>
                 <field name="priority"/>
-                <field name="assigned_technician"/>
+                <field name="assigned_technician1"/>
                 <field name="status" widget="badge"
                        decoration-info="status == 'raised'"
                        decoration-warning="status == 'in_progress'"
                        decoration-success="status == 'resolved'"
                        decoration-muted="status == 'draft'"
-                       decoration-primary="status == 'closed'"/>
+                       decoration-primary="status == 'assigned'"/>
 
             </list>
         </field>
@@ -33,8 +33,15 @@
                             class="btn-primary"
                             invisible="status != 'draft'"/>
 
+                    <button name="action_assign"
+                            string="Assign"
+                            type="object"
+                            class="btn-primary"
+                            invisible="status != 'raised'"
+                            groups="it_asset_management.group_it_asset_manager"/>
+
                     <field name="status" widget="statusbar"
-                           statusbar_visible="draft,raised,in_progress,resolved,closed"/>
+                           statusbar_visible="draft,raised,in_progress,resolved,assigned"/>
                 </header>
 
                 <sheet>
@@ -49,8 +56,14 @@
                         <group>
                             <field name="ticket_generated_date"/>
                             <field name="ticket_raised_date"/>
-                            <field name="priority"/>
-                            <field name="assigned_technician"/>
+
+                            <field name="priority" groups="it_asset_management.group_it_asset_manager"/>
+                            <field name="priority" groups="!it_asset_management.group_it_asset_manager" readonly="1"/>
+
+                            <field name="assigned_technician1" groups="it_asset_management.group_it_asset_manager"/>
+                            <field name="assigned_technician1" groups="!it_asset_management.group_it_asset_manager" readonly="1"/>
+                            <!--                            <field name="assigned_technician1"/>-->
+
                         </group>
 
                     </group>
@@ -59,15 +72,14 @@
 
                         <page string="Problem Details">
                             <group>
-<!--                                <field name="faulty_line_ids"-->
-<!--                                       widget="many2many_tags"/>-->
+                                <!--                                <field name="faulty_line_ids"-->
+                                <!--                                       widget="many2many_tags"/>-->
                                 <field name="issue_type"/>
                                 <field name="description"/>
                             </group>
                         </page>
 
                     </notebook>
-
 
 
                 </sheet>

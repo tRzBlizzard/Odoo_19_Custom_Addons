@@ -1,0 +1,7 @@
+<odoo>
+    <record id="group_it_technician" model="res.groups">
+        <field name="name">IT Technician</field>
+        <field name="comment">Can Resolve IT Help Desk Tickets.</field>
+<!--        <field name="implied_ids" eval="[(4, ref('group_it_asset_user'))]"/>-->
+    </record>
+</odoo>

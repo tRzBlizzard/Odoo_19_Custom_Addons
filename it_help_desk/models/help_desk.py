@@ -1,4 +1,5 @@
 from google.auth import default
+from odoo.exceptions import ValidationError
 from odoo import fields, models, api
 
 
@@ -46,9 +47,9 @@ class ItHelpDesk(models.Model):
         selection=[
             ('draft', 'Draft'),
             ('raised', 'Raised'),
+            ('assigned', 'Assigned'),
             ('in_progress', 'In Progress'),
             ('resolved', 'Resolved'),
-            ('closed', 'Closed'),
         ],
         string='Status',
         default='draft',
@@ -64,12 +65,23 @@ class ItHelpDesk(models.Model):
         default='0',
         tracking=True
     )
-    assigned_technician = fields.Many2one(
+
+
+    # assigned_technician = fields.Many2one(
+    #     comodel_name='res.partner',
+    #     string='Assigned Tech',
+    #     domain="[('is_technicians', '=', True)]",
+    #     tracking=True
+    # )
+
+    assigned_technician1 = fields.Many2one(
         comodel_name='res.users',
         string='Assigned Technician',
-        default='-',
+        # domain="[('is_technicians', '=', True)]",
         tracking=True,
     )
+
+
 
     faulty_line_ids = fields.Many2many(
         comodel_name='it.asset.request.line',
@@ -140,3 +152,13 @@ class ItHelpDesk(models.Model):
                 # )
 
                 # template.send_mail(request.id, force_send=True)
+
+    def action_assign(self):
+        for ticket in self:
+            if not ticket.assigned_technician:
+                raise ValidationError(
+                    "You cannot move this ticket to In Progress without assigning a technician."
+                )
+            ticket.status = "assigned"
+
+
