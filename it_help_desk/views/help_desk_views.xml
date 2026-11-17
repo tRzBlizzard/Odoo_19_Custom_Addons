@@ -31,7 +31,8 @@
                             string="Raise Ticket"
                             type="object"
                             class="btn-primary"
-                            invisible="status != 'draft'"/>
+                            invisible="status != 'draft'"
+                            groups="it_asset_management.group_it_asset_user"/>
 
                     <button name="action_assign"
                             string="Assign"
@@ -39,6 +40,26 @@
                             class="btn-primary"
                             invisible="status != 'raised'"
                             groups="it_asset_management.group_it_asset_manager"/>
+
+                    <button name="action_start_work"
+                            string="Accept Ticket"
+                            type="object"
+                            class="btn-success"
+                            invisible="status != 'assigned'"
+                            groups="it_help_desk.group_it_technician"/>
+
+                    <button name="action_resolve"
+                            string="Resolved"
+                            type="object"
+                            class="btn-danger"
+                            invisible="status != 'in_progress'"
+                            groups="it_help_desk.group_it_technician"/>
+
+                    <button name="action_return_to_draft"
+                            string="Reset"
+                            type="object"
+                            class="btn-secondary"/>
+<!--                            groups="it_help_desk.group_it_technician"/>-->
 
                     <field name="status" widget="statusbar"
                            statusbar_visible="draft,raised,in_progress,resolved,assigned"/>
@@ -56,6 +77,9 @@
                         <group>
                             <field name="ticket_generated_date"/>
                             <field name="ticket_raised_date"/>
+
+                            <field name="ticket_resolve_date" groups="it_help_desk.group_it_technician"/>
+                            <field name="ticket_resolve_date" groups="!it_help_desk.group_it_technician" readonly="1"/>
 
                             <field name="priority" groups="it_asset_management.group_it_asset_manager"/>
                             <field name="priority" groups="!it_asset_management.group_it_asset_manager" readonly="1"/>
@@ -76,6 +100,17 @@
                                 <!--                                       widget="many2many_tags"/>-->
                                 <field name="issue_type"/>
                                 <field name="description"/>
+                            </group>
+                        </page>
+
+                        <page string="Resolution Notes">
+                            <group>
+                                <field name="resolution_notes"
+                                       placeholder="Describe the issue, troubleshooting performed, and solution applied..."
+                                       groups="!it_help_desk.group_it_technician" readonly="1"/>
+                                <field name="resolution_notes"
+                                       placeholder="Describe the issue, troubleshooting performed, and solution applied..."
+                                       groups="it_help_desk.group_it_technician"/>
                             </group>
                         </page>
 

@@ -39,9 +39,20 @@ class ItHelpDesk(models.Model):
         readonly=True,
     )
 
+    ticket_resolve_date = fields.Datetime(
+        string='Estimated Resolve Date',
+        # readonly=True,
+    )
+
     description = fields.Text(
         string='Problem Description'
     )
+
+    resolution_notes = fields.Text(
+        string='Resolution Notes',
+        tracking = True,
+    )
+
 
     status = fields.Selection(
         selection=[
@@ -77,7 +88,11 @@ class ItHelpDesk(models.Model):
     assigned_technician1 = fields.Many2one(
         comodel_name='res.users',
         string='Assigned Technician',
-        # domain="[('is_technicians', '=', True)]",
+        domain=lambda self: [
+            ('group_ids', 'in', [
+                self.env.ref('it_help_desk.group_it_technician').id
+            ])
+        ],
         tracking=True,
     )
 
@@ -155,10 +170,38 @@ class ItHelpDesk(models.Model):
 
     def action_assign(self):
         for ticket in self:
-            if not ticket.assigned_technician:
+            if not ticket.assigned_technician1:
                 raise ValidationError(
                     "You cannot move this ticket to In Progress without assigning a technician."
                 )
             ticket.status = "assigned"
 
+    def action_start_work(self):
+        for ticket in self:
+            if not ticket.ticket_resolve_date:
+                raise ValidationError(
+                    "You cannot Accept this ticket without adding an estimation date."
+                )
+            if ticket.assigned_technician1 != self.env.user:
+                raise ValidationError(
+                    "Only the assigned technician can start working on this ticket."
+                )
+            ticket.status = "assigned"
+            ticket.status = "in_progress"
 
+    def action_resolve(self):
+        for ticket in self:
+            if not ticket.resolution_notes:
+                raise ValidationError(
+                    "You cannot resolve this ticket without adding the resolution notes."
+                )
+
+            if ticket.assigned_technician1 != self.env.user:
+                raise ValidationError(
+                    "Only the assigned technician can resolve this ticket."
+                )
+            ticket.status = "resolved"
+
+    def action_return_to_draft(self):
+        for ticket in self:
+            ticket.status = "draft"
