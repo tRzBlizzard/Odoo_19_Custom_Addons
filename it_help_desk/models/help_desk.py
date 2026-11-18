@@ -158,6 +158,10 @@ class ItHelpDesk(models.Model):
 
     def action_raise_ticket(self):
         for ticket in self:
+
+            if not ticket.issue_type or not ticket.description:
+                raise ValidationError("Please select issue type and add description")
+
             if ticket.status == "draft":
                 # manager = request._get_it_asset_manager()
                 ticket.ticket_raised_date = fields.Datetime.now()
@@ -175,6 +179,12 @@ class ItHelpDesk(models.Model):
                     "You cannot move this ticket to In Progress without assigning a technician."
                 )
             ticket.status = "assigned"
+
+            template = self.env.ref(
+                'it_help_desk.mail_template_it_help_desk_assigned'
+            )
+            mail_id = template.send_mail(ticket.id, force_send=True)
+            print("EMAIL GENERATED:", mail_id)
 
     def action_start_work(self):
         for ticket in self:

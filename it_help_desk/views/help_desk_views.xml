@@ -66,13 +66,16 @@
                 </header>
 
                 <sheet>
+                    <widget name="web_ribbon"
+                        title="RESOLVED"
+                        bg_color="text-bg-success"
+                        invisible="status != 'resolved'"/>
                     <group>
                         <group>
                             <field name="request_id"/>
                             <field name="request_number"/>
                             <field name="requester_id"/>
                             <field name="request_title"/>
-                            <field name="approver_id"/>
                         </group>
                         <group>
                             <field name="ticket_generated_date"/>
@@ -81,6 +84,15 @@
                             <field name="ticket_resolve_date" groups="it_help_desk.group_it_technician"/>
                             <field name="ticket_resolve_date" groups="!it_help_desk.group_it_technician" readonly="1"/>
 
+                        </group>
+
+                    </group>
+                    <br/>
+                    <group>
+                        <group>
+                            <field name="approver_id"/>
+                        </group>
+                        <group>
                             <field name="priority" groups="it_asset_management.group_it_asset_manager"/>
                             <field name="priority" groups="!it_asset_management.group_it_asset_manager" readonly="1"/>
 
@@ -89,7 +101,6 @@
                             <!--                            <field name="assigned_technician1"/>-->
 
                         </group>
-
                     </group>
 
                     <notebook>
