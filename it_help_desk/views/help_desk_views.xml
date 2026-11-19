@@ -59,7 +59,13 @@
                             string="Reset"
                             type="object"
                             class="btn-secondary"/>
-<!--                            groups="it_help_desk.group_it_technician"/>-->
+                    <!--                            groups="it_help_desk.group_it_technician"/>-->
+
+                    <button name="%(report_helpdesk_ticket)d"
+                            string="Print Ticket"
+                            type="action"
+                            class="btn-primary"
+                            invisible="status != 'resolved'"/>
 
                     <field name="status" widget="statusbar"
                            statusbar_visible="draft,raised,in_progress,resolved,assigned"/>
@@ -67,9 +73,9 @@
 
                 <sheet>
                     <widget name="web_ribbon"
-                        title="RESOLVED"
-                        bg_color="text-bg-success"
-                        invisible="status != 'resolved'"/>
+                            title="RESOLVED"
+                            bg_color="text-bg-success"
+                            invisible="status != 'resolved'"/>
                     <group>
                         <group>
                             <field name="request_id"/>
@@ -97,7 +103,8 @@
                             <field name="priority" groups="!it_asset_management.group_it_asset_manager" readonly="1"/>
 
                             <field name="assigned_technician1" groups="it_asset_management.group_it_asset_manager"/>
-                            <field name="assigned_technician1" groups="!it_asset_management.group_it_asset_manager" readonly="1"/>
+                            <field name="assigned_technician1" groups="!it_asset_management.group_it_asset_manager"
+                                   readonly="1"/>
                             <!--                            <field name="assigned_technician1"/>-->
 
                         </group>

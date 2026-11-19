@@ -11,6 +11,7 @@
         "security/ir.model.access.csv",
         "data/sequence.xml",
         'data/mail_template.xml',
+        'report/ticket_report.xml',
         'views/res_partner_views.xml',
         "views/help_desk_views.xml",
     ],

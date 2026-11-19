@@ -183,8 +183,10 @@ class ItHelpDesk(models.Model):
             template = self.env.ref(
                 'it_help_desk.mail_template_it_help_desk_assigned'
             )
-            mail_id = template.send_mail(ticket.id, force_send=True)
-            print("EMAIL GENERATED:", mail_id)
+            template.send_mail(ticket.id,force_send=True,email_values={'email_to': ticket.assigned_technician1.email,},)
+            # print("EMAIL GENERATED:", mail_id)
+            # print("Assigned Technician:", ticket.assigned_technician1.name)
+            # print("Technician Email:", ticket.assigned_technician1.email)
 
     def action_start_work(self):
         for ticket in self:
@@ -211,6 +213,16 @@ class ItHelpDesk(models.Model):
                     "Only the assigned technician can resolve this ticket."
                 )
             ticket.status = "resolved"
+
+            email_list = [ticket.requester_id.email, ticket.approver_id.email]
+
+            template = self.env.ref(
+                'it_help_desk.mail_template_it_help_desk_resolved'
+            )
+            # template.send_mail(ticket.id, force_send=True, email_values={'email_to': ticket.requester_id.email, }, )
+            template.send_mail(ticket.id, force_send=True,email_values={'email_to': ', '.join(email_list),},)
+
+
 
     def action_return_to_draft(self):
         for ticket in self:

@@ -1,0 +1,16 @@
+<odoo>
+    <record id="report_helpdesk_ticket" model="ir.actions.report">
+        <field name="name">Print Ticket</field>
+        <field name="model">it.help.desk</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">it_help_desk.ticket_report</field>
+        <field name="report_file">it_help_desk.ticket_report</field>
+        <field name="print_report_name">'%s' % (object.ticket_number)</field>
+        <field name="binding_model_id" ref="model_it_help_desk"/>
+        <field name="binding_type">report</field>
+    </record>
+    <template id="ticket_report">
+
+    </template>
+
+</odoo>
