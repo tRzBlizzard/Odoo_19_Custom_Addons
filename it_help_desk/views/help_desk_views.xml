@@ -64,7 +64,7 @@
                     <button name="%(report_helpdesk_ticket)d"
                             string="Print Ticket"
                             type="action"
-                            class="btn-primary"
+                            class="btn-success"
                             invisible="status != 'resolved'"/>
 
                     <field name="status" widget="statusbar"

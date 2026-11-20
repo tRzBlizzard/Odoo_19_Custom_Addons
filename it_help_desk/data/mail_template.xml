@@ -107,7 +107,7 @@
         <field name="body_html" type="html">
             <div style="font-family: Arial, sans-serif;">
 
-                <h2>IT Help Desk Ticket Assigned</h2>
+                <h2>IT Help Desk Ticket Resolved!</h2>
 
                 <p>Hello
                     <t t-out="object.requester_id.name"/>,

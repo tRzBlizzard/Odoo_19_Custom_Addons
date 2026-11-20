@@ -1,6 +1,7 @@
 from google.auth import default
 from odoo.exceptions import ValidationError
 from odoo import fields, models, api
+from urllib.parse import quote
 
 
 class ItHelpDesk(models.Model):
@@ -42,6 +43,11 @@ class ItHelpDesk(models.Model):
     ticket_resolve_date = fields.Datetime(
         string='Estimated Resolve Date',
         # readonly=True,
+    )
+
+    ticket_actual_resolve_date = fields.Datetime(
+        string='Actual Resolve Date',
+        readonly=True,
     )
 
     description = fields.Text(
@@ -208,6 +214,8 @@ class ItHelpDesk(models.Model):
                     "You cannot resolve this ticket without adding the resolution notes."
                 )
 
+            ticket.ticket_actual_resolve_date = fields.Datetime.now()
+
             if ticket.assigned_technician1 != self.env.user:
                 raise ValidationError(
                     "Only the assigned technician can resolve this ticket."
@@ -227,3 +235,19 @@ class ItHelpDesk(models.Model):
     def action_return_to_draft(self):
         for ticket in self:
             ticket.status = "draft"
+
+    def get_ticket_qr_code_url(self):
+        self.ensure_one()
+
+        ticket_url = (
+            f"{self.get_base_url()}/web"
+            f"#id={self.id}&model=it.help.desk&view_type=form"
+        )
+
+        encoded_url = quote(ticket_url, safe='')
+
+        return (
+            f"/report/barcode/?barcode_type=QR"
+            f"&value={encoded_url}"
+            f"&width=200&height=200"
+        )
